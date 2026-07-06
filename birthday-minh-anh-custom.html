@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Nguyen Ngoc Minh Anh 🎂</title>
+
+<!-- Google Fonts: Great Vibes (script name), Dancing Script (accents), Poppins (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* =====================================================================
+     1. DESIGN TOKENS — change these to re-theme the whole page in seconds
+     ===================================================================== */
+  :root{
+    --blush:        #FFF6F8;   /* page background start (soft white-pink) */
+    --pink-pale:    #FFE3EC;   /* page background end (pastel pink)       */
+    --pink:         #FFB3C6;   /* mid pink accent                         */
+    --pink-deep:    #FF7A9C;   /* saturated pink accent                   */
+    --rose-gold:    #C98A93;   /* rose gold, lighter                      */
+    --rose-gold-deep:#B76E79;  /* rose gold, deeper (buttons/borders)     */
+    --plum:         #5C2A3A;   /* deep rose-brown text colour             */
+    --white:        #FFFDFB;   /* card / polaroid white                   */
+    --shadow: 0 14px 34px rgba(183,110,121,0.18);
+    --shadow-soft: 0 6px 18px rgba(183,110,121,0.12);
+    --radius-lg: 26px;
+    --radius-md: 16px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Poppins', sans-serif;
+    color:var(--plum);
+    background:linear-gradient(165deg, var(--blush) 0%, var(--pink-pale) 55%, var(--pink) 130%);
+    background-attachment:fixed;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{ max-width:100%; display:block; }
+  h1,h2,h3{ margin:0; }
+  p{ margin:0; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+
+  /* =====================================================================
+     2. FLOATING BACKGROUND (hearts / butterflies / flowers / leaves)
+     Populated by JS at the bottom of the page. Purely decorative,
+     positioned "fixed" behind every section so it never blocks text.
+     ===================================================================== */
+  .floating-bg{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:1; /* sits above <body> background, below section content */
+  }
+  .float-el{
+    position:absolute;
+    top:0; left:0;
+    will-change:transform, opacity;
+    user-select:none;
+  }
+  .float-el.rising{ animation-name: floatUp; }
+  .float-el.falling{ animation-name: floatDown; }
+  .float-el{ animation-timing-function:linear; animation-iteration-count:infinite; }
+
+  @keyframes floatUp{
+    0%   { transform:translate(0,10vh) rotate(0deg);   opacity:0; }
+    8%   { opacity:.85; }
+    92%  { opacity:.85; }
+    100% { transform:translate(var(--drift,40px), -115vh) rotate(340deg); opacity:0; }
+  }
+  @keyframes floatDown{
+    0%   { transform:translate(0,-10vh) rotate(0deg);  opacity:0; }
+    8%   { opacity:.85; }
+    92%  { opacity:.85; }
+    100% { transform:translate(var(--drift,-40px), 115vh) rotate(-320deg); opacity:0; }
+  }
+
+  /* =====================================================================
+     3. SHARED SECTION LAYOUT — every section sits ABOVE the floating bg
+     via position:relative + z-index, and carries its own background so
+     the animation never fights with readability.
+     ===================================================================== */
+  section{ position:relative; z-index:2; }
+
+  .section-eyebrow{
+    font-family:'Dancing Script', cursive;
+    font-size:1.3rem;
+    color:var(--rose-gold-deep);
+    margin-bottom:.25rem;
+  }
+  .section-title{
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
+    font-size:clamp(1.6rem, 3.2vw, 2.4rem);
+    color:var(--plum);
+    margin-bottom:1.8rem;
+    letter-spacing:.3px;
+  }
+
+  /* fade-up reveal, triggered by IntersectionObserver in JS */
+  .reveal{
+    opacity:0;
+    transform:translateY(36px);
+    transition:opacity .8s ease, transform .8s ease;
+  }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  /* =====================================================================
+     4. MUSIC TOGGLE
+     ===================================================================== */
+  .music-toggle{
+    position:fixed;
+    top:20px; right:20px;
+    z-index:50;
+    width:52px; height:52px;
+    border-radius:50%;
+    background:rgba(255,255,255,.65);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.8);
+    box-shadow:var(--shadow-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem;
+    color:var(--rose-gold-deep);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .music-toggle:hover{ transform:scale(1.08); box-shadow:var(--shadow); }
+  .music-toggle .music-icon{ display:inline-block; transition:transform .4s ease; }
+  .music-toggle.playing .music-icon{ animation:spinNote 2.4s linear infinite; }
+  @keyframes spinNote{ to{ transform:rotate(360deg); } }
+
+  /* =====================================================================
+     5. HERO
+     ===================================================================== */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:2rem 1.5rem;
+    /* no opaque background here on purpose — lets floating bg show through */
+  }
+  .hero-content{ max-width:900px; }
+
+  .hero-eyebrow{
+    font-family:'Dancing Script', cursive;
+    font-weight:600;
+    font-size:clamp(1.1rem,2.4vw,1.5rem);
+    color:var(--rose-gold-deep);
+    opacity:0;
+    animation:fadeUp .9s ease .1s forwards;
+  }
+
+  .hero-title{ margin-top:.6rem; }
+  .hero-title-line1{
+    display:block;
+    font-family:'Dancing Script', cursive;
+    font-weight:700;
+    font-size:clamp(1.7rem, 4.4vw, 2.8rem);
+    color:var(--rose-gold-deep);
+    opacity:0;
+    animation:fadeUp .9s ease .3s forwards;
+  }
+  .hero-title-name{
+    display:block;
+    font-family:'Great Vibes', cursive;
+    font-weight:400;
+    line-height:1.15;
+    font-size:clamp(3rem, 10vw, 7.2rem);
+    background:linear-gradient(90deg, var(--pink-deep), var(--rose-gold-deep), var(--pink) , var(--pink-deep));
+    background-size:300% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    padding:.1em 0;
+    opacity:0;
+    animation:fadeUp .9s ease .5s forwards, shimmer 7s linear 1.4s infinite;
+  }
+  @keyframes shimmer{ to{ background-position:300% center; } }
+
+  .age-badge{
+    display:inline-flex;
+    align-items:baseline;
+    gap:.3rem;
+    margin-top:1.4rem;
+    padding:.6rem 1.6rem;
+    border:2px solid var(--rose-gold-deep);
+    border-radius:999px;
+    background:rgba(255,255,255,.5);
+    backdrop-filter:blur(6px);
+    opacity:0;
+    animation:fadeUp .9s ease .7s forwards;
+  }
+  .age-number{
+    font-family:'Poppins',sans-serif;
+    font-weight:700;
+    font-size:1.6rem;
+    color:var(--pink-deep);
+  }
+  .age-label{
+    font-family:'Poppins',sans-serif;
+    font-weight:500;
+    font-size:.95rem;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    color:var(--rose-gold-deep);
+  }
+
+  .hero-subtitle{
+    margin-top:1.4rem;
+    font-size:clamp(1rem,1.6vw,1.15rem);
+    font-weight:300;
+    color:var(--plum);
+    opacity:0;
+    animation:fadeUp .9s ease .9s forwards;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(22px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:34px; left:50%;
+    transform:translateX(-50%);
+    width:26px; height:42px;
+    border:2px solid var(--rose-gold-deep);
+    border-radius:20px;
+    opacity:.7;
+  }
+  .scroll-cue span{
+    position:absolute;
+    top:6px; left:50%;
+    width:5px; height:5px;
+    margin-left:-2.5px;
+    border-radius:50%;
+    background:var(--rose-gold-deep);
+    animation:scrollDot 1.6s ease infinite;
+  }
+  @keyframes scrollDot{
+    0%{ transform:translateY(0); opacity:1; }
+    70%{ opacity:0; }
+    100%{ transform:translateY(18px); opacity:0; }
+  }
+
+  /* =====================================================================
+     6. MAKE-A-WISH / CAKE SECTION (signature interactive moment)
+     ===================================================================== */
+  .wish-section{
+    background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.85));
+    padding:5rem 1.5rem 6rem;
+    text-align:center;
+  }
+  .cake-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.8rem;
+    max-width:420px;
+    margin:0 auto;
+  }
+
+  .cake{ position:relative; width:230px; height:170px; margin-top:46px; }
+
+  .candles{
+    position:absolute;
+    left:50%; bottom:170px;
+    transform:translateX(-50%);
+    display:flex;
+    gap:20px;
+    z-index:3;
+  }
+  .candle{
+    position:relative;
+    width:6px; height:40px;
+    border-radius:3px;
+    background:linear-gradient(180deg,#fff, #ffd6e0);
+  }
+  .candle .flame{
+    position:absolute;
+    top:-17px; left:50%;
+    transform:translateX(-50%);
+    width:11px; height:17px;
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    background:radial-gradient(circle at 50% 32%, #fff6b0, #ffb703 55%, #ff7a1a 100%);
+    box-shadow:0 0 14px 5px rgba(255,183,3,.55);
+    animation:flicker 1.3s ease-in-out infinite;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .candle .smoke{
+    position:absolute;
+    top:-18px; left:50%;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:rgba(170,170,170,.55);
+    opacity:0;
+    pointer-events:none;
+  }
+  @keyframes flicker{
+    0%,100%{ transform:translateX(-50%) scale(1) rotate(-3deg); }
+    50%{ transform:translateX(-50%) scale(1.14) rotate(3deg); }
+  }
+  .candle.blown .flame{ opacity:0; transform:translateX(-50%) scale(.15); }
+  .candle.blown .smoke{ animation:smokePuff 1.3s ease-out forwards; }
+  @keyframes smokePuff{
+    0%{ opacity:.55; transform:translate(-50%,0) scale(1); }
+    100%{ opacity:0; transform:translate(-50%,-46px) scale(3.2); }
+  }
+
+  .cake-tier{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    border-radius:16px 16px 10px 10px;
+    box-shadow:inset 0 -8px 14px rgba(0,0,0,.05);
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-evenly;
+    padding-bottom:9px;
+  }
+  .tier-top{
+    bottom:90px; width:150px; height:80px;
+    background:linear-gradient(180deg,#ffeef3,#ffd0dd);
+  }
+  .tier-bottom{
+    bottom:0; width:230px; height:96px;
+    background:linear-gradient(180deg,#ffd3e0,#ffaec3);
+  }
+  .cake-dot{ width:8px; height:8px; border-radius:50%; background:var(--rose-gold-deep); opacity:.65; }
+  .cake-plate{
+    position:absolute;
+    bottom:-10px; left:50%;
+    transform:translateX(-50%);
+    width:270px; height:18px;
+    border-radius:50%;
+    background:linear-gradient(180deg,#fff,#f4dee3);
+    box-shadow:var(--shadow-soft);
+  }
+
+  .wish-btn{
+    padding:.9rem 2.4rem;
+    border-radius:999px;
+    font-weight:600;
+    font-size:1rem;
+    letter-spacing:.3px;
+    color:#fff;
+    background:linear-gradient(120deg, var(--pink-deep), var(--rose-gold-deep));
+    box-shadow:var(--shadow-soft);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .wish-btn:hover{ transform:translateY(-3px); box-shadow:var(--shadow); }
+  .wish-btn:active{ transform:translateY(0); }
+
+  .wish-message{
+    font-family:'Dancing Script', cursive;
+    font-size:1.4rem;
+    color:var(--rose-gold-deep);
+    min-height:1.6rem;
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .wish-message.show{ opacity:1; transform:translateY(0); }
+
+  /* =====================================================================
+     7. MAIN SECTION — album (left) + wishes (right)
+     ===================================================================== */
+  .main-section{
+    background:var(--blush);
+    padding:5rem 6vw 6rem;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:4rem;
+    align-items:start;
+  }
+
+  /* ---- Photo album ---- */
+  .photo-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1.6rem 1.3rem;
+  }
+  .polaroid{
+    position:relative;
+    background:var(--white);
+    padding:10px 10px 30px;
+    border-radius:6px;
+    box-shadow:var(--shadow-soft);
+    transform:rotate(var(--r, 0deg));
+    transition:transform .4s cubic-bezier(.2,.8,.3,1), box-shadow .4s ease;
+  }
+  .polaroid::before{
+    /* little washi-tape accent */
+    content:'';
+    position:absolute;
+    top:-10px; left:50%;
+    transform:translateX(-50%) rotate(-3deg);
+    width:46px; height:18px;
+    background:rgba(255,179,198,.55);
+    border:1px solid rgba(255,255,255,.6);
+  }
+  .polaroid:nth-child(6n+1){ --r:-4deg; }
+  .polaroid:nth-child(6n+2){ --r:3deg; }
+  .polaroid:nth-child(6n+3){ --r:-2deg; }
+  .polaroid:nth-child(6n+4){ --r:4deg; }
+  .polaroid:nth-child(6n+5){ --r:-3deg; }
+  .polaroid:nth-child(6n+6){ --r:2deg; }
+  .polaroid img{
+    width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    border-radius:2px;
+  }
+  .polaroid figcaption{
+    position:absolute;
+    bottom:6px; left:0; right:0;
+    text-align:center;
+    font-family:'Dancing Script', cursive;
+    font-size:.95rem;
+    color:var(--rose-gold-deep);
+  }
+  .polaroid:hover{
+    transform:rotate(0deg) scale(1.06) translateY(-6px);
+    box-shadow:0 20px 40px rgba(183,110,121,.28);
+    z-index:5;
+  }
+
+  /* ---- Wishes card ---- */
+  .wish-card{
+    position:relative;
+    padding:2.6rem 2.2rem;
+    background:rgba(255,255,255,.55);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.65);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+  }
+  .quote-mark{
+    position:absolute;
+    top:6px; left:22px;
+    font-family:'Great Vibes', cursive;
+    font-size:4.5rem;
+    color:var(--pink);
+    opacity:.7;
+    line-height:1;
+  }
+  .wish-card-title{
+    font-family:'Dancing Script', cursive;
+    font-weight:700;
+    font-size:1.9rem;
+    color:var(--rose-gold-deep);
+    margin-bottom:1.2rem;
+    text-align:center;
+  }
+  .wish-text-scroll{
+    max-height:300px;
+    overflow-y:auto;
+    padding-right:.8rem;
+    font-weight:300;
+    line-height:1.85;
+    font-size:1rem;
+    color:var(--plum);
+  }
+  .wish-text-scroll p{ margin-bottom:1rem; }
+  .wish-text-scroll::-webkit-scrollbar{ width:6px; }
+  .wish-text-scroll::-webkit-scrollbar-track{ background:transparent; }
+  .wish-text-scroll::-webkit-scrollbar-thumb{ background:var(--pink); border-radius:10px; }
+  .wish-text-scroll{ scrollbar-width:thin; scrollbar-color:var(--pink) transparent; }
+
+  .wish-signature{
+    margin-top:1.6rem;
+    text-align:right;
+    font-family:'Dancing Script', cursive;
+    font-size:1.25rem;
+    color:var(--rose-gold-deep);
+  }
+  .wish-signature span{ font-weight:700; }
+
+  /* =====================================================================
+     8. FOOTER
+     ===================================================================== */
+  .site-footer{
+    background:linear-gradient(180deg, var(--pink-pale), var(--pink));
+    text-align:center;
+    padding:3.2rem 1.5rem 2.4rem;
+  }
+  .footer-script{
+    font-family:'Great Vibes', cursive;
+    font-size:2.4rem;
+    color:#fff;
+    text-shadow:0 2px 10px rgba(92,42,58,.25);
+  }
+  .footer-note{
+    margin-top:.5rem;
+    font-size:.85rem;
+    font-weight:300;
+    color:rgba(92,42,58,.75);
+  }
+
+  /* =====================================================================
+     9. CONFETTI CANVAS (birthday-wish burst)
+     ===================================================================== */
+  #confettiCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:999;
+  }
+
+  /* =====================================================================
+     10. RESPONSIVE — tablet & mobile
+     ===================================================================== */
+  @media (max-width: 900px){
+    .main-section{
+      grid-template-columns:1fr;
+      gap:3.2rem;
+      padding:4rem 6vw 5rem;
+    }
+    .wish-card{ padding:2.2rem 1.6rem; }
+  }
+
+  @media (max-width: 520px){
+    .photo-grid{ gap:1.1rem .9rem; }
+    .music-toggle{ width:44px; height:44px; top:14px; right:14px; font-size:1.1rem; }
+    .cake{ transform:scale(.88); }
+    .section-title{ margin-bottom:1.3rem; }
+  }
+
+  /* =====================================================================
+     11. ACCESSIBILITY — respect reduced-motion preference
+     ===================================================================== */
+  @media (prefers-reduced-motion: reduce){
+    .float-el{ animation:none !important; display:none; }
+    .hero-title-name{ animation:none !important; background-position:0 center; }
+    .candle .flame{ animation:none !important; }
+    *{ scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Decorative floating hearts / butterflies / flowers / leaves (built by JS) -->
+  <div class="floating-bg" id="floatingBg" aria-hidden="true"></div>
+
+  <!-- Background music toggle: plays a Happy Birthday melody with Web Audio. -->
+  <button class="music-toggle" id="musicToggle" aria-label="Play background music" title="Play/pause music">
+    <span class="music-icon">♪</span>
+  </button>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">✨ A Very Special Day ✨</p>
+      <h1 class="hero-title">
+        <!-- EDIT HERE: change the greeting line -->
+        <span class="hero-title-line1">Happy Birthday</span>
+        <!-- EDIT HERE: change the name -->
+        <span class="hero-title-name">Nguyen Ngoc Minh Anh</span>
+      </h1>
+      <div class="age-badge">
+        <!-- EDIT HERE: change the age -->
+        <span class="age-number">22</span>
+        <span class="age-label">nd Birthday</span>
+      </div>
+      <!-- EDIT HERE: change the subtitle -->
+      <p class="hero-subtitle">Wishing you a day as wonderful and radiant as you are 💕</p>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ===================== MAKE A WISH ===================== -->
+  <section class="wish-section reveal" id="wishSection">
+    <p class="section-eyebrow">Close your eyes and</p>
+    <h2 class="section-title">Make a Wish 🎂</h2>
+
+    <div class="cake-wrap">
+      <div class="cake" id="cake">
+        <div class="candles" id="candles">
+          <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+          <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+          <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+        </div>
+        <div class="cake-tier tier-top">
+          <span class="cake-dot"></span><span class="cake-dot"></span><span class="cake-dot"></span><span class="cake-dot"></span>
+        </div>
+        <div class="cake-tier tier-bottom">
+          <span class="cake-dot"></span><span class="cake-dot"></span><span class="cake-dot"></span><span class="cake-dot"></span><span class="cake-dot"></span><span class="cake-dot"></span>
+        </div>
+        <div class="cake-plate"></div>
+      </div>
+
+      <button class="wish-btn" id="wishBtn">Make a Wish</button>
+      <p class="wish-message" id="wishMessage">Your wish is already on its way 💫</p>
+    </div>
+  </section>
+
+  <!-- ===================== ALBUM + WISHES ===================== -->
+  <section class="main-section">
+
+    <!-- ---------- LEFT: Photo album ---------- -->
+    <div class="album-col reveal">
+      <p class="section-eyebrow">Memory Lane</p>
+      <h2 class="section-title">Our Favorite Moments</h2>
+
+      <!-- EDIT HERE: replace these image files inside minh-anh-assets if needed. -->
+      <div class="photo-grid" id="photoGrid">
+        <figure class="polaroid"><img src="minh-anh-assets/1.jpg" alt="Minh Anh memory 1"></figure>
+        <figure class="polaroid"><img src="minh-anh-assets/2.jpg" alt="Minh Anh memory 2"></figure>
+        <figure class="polaroid"><img src="minh-anh-assets/3.jpg" alt="Minh Anh memory 3"></figure>
+        <figure class="polaroid"><img src="minh-anh-assets/4.jpg" alt="Minh Anh memory 4"></figure>
+        <figure class="polaroid"><img src="minh-anh-assets/5.jpg" alt="Minh Anh memory 5"></figure>
+        <figure class="polaroid"><img src="minh-anh-assets/6.webp" alt="Minh Anh memory 6"></figure>
+        <figure class="polaroid"><img src="minh-anh-assets/7.jpg" alt="Minh Anh memory 7"></figure>
+        <figure class="polaroid"><img src="minh-anh-assets/8.jpg" alt="Minh Anh memory 8"></figure>
+      </div>
+    </div>
+
+    <!-- ---------- RIGHT: Birthday wishes ---------- -->
+    <div class="wishes-col reveal">
+      <div class="wish-card">
+        <span class="quote-mark">“</span>
+        <h3 class="wish-card-title">For You, Minh Anh</h3>
+
+        <!-- EDIT HERE: write your own heartfelt birthday message.          -->
+        <!-- Add or remove <p> paragraphs freely — the box scrolls          -->
+        <!-- automatically if the message runs long.                       -->
+        <div class="wish-text-scroll">
+          <p>Dear Minh Anh,</p>
+          <p>Happy 22nd birthday! I hope today feels exactly the way you deserve - full of laughter, love, and every little thing that makes you smile.</p>
+          <p>You bring so much warmth, kindness, laughte and light into the lives of everyone around you, and I feel incredibly lucky to call you my friend :)))</p>
+          <p>This new age of your life is going to be full of beautiful new chapters - new adventures, new dreams, and new memories waiting to be made. I can't wait to see everything you accomplish and every place your beautiful heart takes you.</p>
+          <p>My wish is that, very soon, Minh Anh will meet someone who'll always be by your side - someone who loves you, cherishes you, and treats you even better than anyone else around you. =)))</p>
+          <p>May this birthday bring you closer to all your dreams, and may this year treat you with all the love, success, and happiness you so richly deserve.</p>
+          <p>Here's to you, Minh Anh - happy birthday, again and again. 🎉💕</p>
+        </div>
+
+        <!-- EDIT HERE: sign it with your own name -->
+        <p class="wish-signature">With all my love, <span>Your Friend</span> 💌</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <!-- EDIT HERE: footer name -->
+    <p class="footer-script">Nguyen Ngoc Minh Anh</p>
+    <p class="footer-note">Made with 💕 &middot; <span id="footerYear"></span></p>
+  </footer>
+
+  <!-- Canvas used only for the confetti burst on "Make a Wish" -->
+  <canvas id="confettiCanvas"></canvas>
+
+<script>
+/* =========================================================================
+   BIRTHDAY PAGE SCRIPT
+   Sections:
+     1. Floating background generator (hearts / butterflies / flowers / leaves)
+     2. Scroll-reveal animation for sections
+     3. Music toggle
+     4. Make-a-wish cake interaction + confetti burst
+     5. Small utilities (footer year)
+   ========================================================================= */
+
+/* ---------- 1. FLOATING BACKGROUND ------------------------------------- */
+(function initFloatingBackground(){
+  const container = document.getElementById('floatingBg');
+  const isSmallScreen = window.matchMedia('(max-width: 600px)').matches;
+  const reducedMotion  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) return; // respect accessibility preference, skip entirely
+
+  // Rising items float from bottom to top; falling items drift top to bottom.
+  const risingEmoji  = ['💕','💗','🦋','✨'];
+  const fallingEmoji = ['🌸','🍃','🌺','🌷'];
+  const total = isSmallScreen ? 14 : 26;
+
+  for (let i = 0; i < total; i++){
+    const el = document.createElement('span');
+    const isRising = Math.random() > 0.5;
+    const emojiSet = isRising ? risingEmoji : fallingEmoji;
+    el.textContent = emojiSet[Math.floor(Math.random() * emojiSet.length)];
+    el.className = 'float-el ' + (isRising ? 'rising' : 'falling');
+
+    const size = 14 + Math.random() * 20;         // 14px - 34px
+    const duration = 12 + Math.random() * 14;     // 12s - 26s
+    const delay = Math.random() * -duration;      // negative delay = already mid-flight on load
+    const left = Math.random() * 100;             // 0% - 100% across the viewport
+    const drift = (Math.random() * 80 - 40) + 'px'; // gentle left/right sway
+
+    el.style.left = left + 'vw';
+    el.style.fontSize = size + 'px';
+    el.style.animationDuration = duration + 's';
+    el.style.animationDelay = delay + 's';
+    el.style.setProperty('--drift', drift);
+
+    container.appendChild(el);
+  }
+})();
+
+/* ---------- 2. SCROLL REVEAL -------------------------------------------- */
+(function initScrollReveal(){
+  const revealEls = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)){
+    revealEls.forEach(el => el.classList.add('in-view'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  revealEls.forEach(el => observer.observe(el));
+})();
+
+/* ---------- 3. HAPPY BIRTHDAY MUSIC TOGGLE ------------------------------ */
+(function initMusicToggle(){
+  const btn = document.getElementById('musicToggle');
+  let audioContext;
+  let masterGain;
+  let isPlaying = false;
+  let loopTimer = null;
+  let activeOscillators = [];
+
+    // Simple Happy Birthday melody. You can replace this with a real music file later if you prefer.
+  const melody = [
+    ['G4', .34], ['G4', .16], ['A4', .50], ['G4', .50], ['C5', .50], ['B4', .95],
+    ['G4', .34], ['G4', .16], ['A4', .50], ['G4', .50], ['D5', .50], ['C5', .95],
+    ['G4', .34], ['G4', .16], ['G5', .50], ['E5', .50], ['C5', .50], ['B4', .50], ['A4', .95],
+    ['F5', .34], ['F5', .16], ['E5', .50], ['C5', .50], ['D5', .50], ['C5', 1.10]
+  ];
+
+  const frequencies = {
+    G4: 392.00, A4: 440.00, B4: 493.88, C5: 523.25,
+    D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99
+  };
+
+  function ensureAudio(){
+    if (audioContext) return;
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioContext.createGain();
+    masterGain.gain.value = 0.14;
+    masterGain.connect(audioContext.destination);
+  }
+
+  function playNote(note, startTime, duration){
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(frequencies[note], startTime);
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.exponentialRampToValueAtTime(0.55, startTime + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration - 0.03);
+
+    oscillator.connect(gain);
+    gain.connect(masterGain);
+    oscillator.start(startTime);
+    oscillator.stop(startTime + duration);
+    activeOscillators.push(oscillator);
+    oscillator.onended = () => {
+      activeOscillators = activeOscillators.filter(item => item !== oscillator);
+    };
+  }
+
+  function playMelody(){
+    if (!isPlaying) return;
+
+    const start = audioContext.currentTime + 0.05;
+    let cursor = 0;
+    melody.forEach(([note, duration]) => {
+      playNote(note, start + cursor, duration);
+      cursor += duration + 0.045;
+    });
+
+    loopTimer = window.setTimeout(playMelody, (cursor + 1.2) * 1000);
+  }
+
+  function stopMelody(){
+    window.clearTimeout(loopTimer);
+    activeOscillators.forEach(oscillator => {
+      try { oscillator.stop(); } catch (error) {}
+    });
+    activeOscillators = [];
+  }
+
+  btn.addEventListener('click', async () => {
+    ensureAudio();
+    if (audioContext.state === 'suspended') await audioContext.resume();
+
+    isPlaying = !isPlaying;
+    btn.classList.toggle('playing', isPlaying);
+    btn.setAttribute('aria-label', isPlaying ? 'Pause Happy Birthday music' : 'Play Happy Birthday music');
+
+    if (isPlaying) {
+      playMelody();
+    } else {
+      stopMelody();
+    }
+  });
+})();
+
+/* ---------- 4. MAKE-A-WISH CAKE + CONFETTI ------------------------------ */
+(function initWishCake(){
+  const wishBtn = document.getElementById('wishBtn');
+  const candles = document.querySelectorAll('#candles .candle');
+  const wishMessage = document.getElementById('wishMessage');
+  let animating = false;
+
+  wishBtn.addEventListener('click', () => {
+    if (animating) return;
+    animating = true;
+
+    // Blow out each candle with a tiny stagger for a nicer effect
+    candles.forEach((candle, i) => {
+      setTimeout(() => candle.classList.add('blown'), i * 180);
+    });
+
+    wishBtn.textContent = 'Wish Sent 💌';
+    setTimeout(() => wishMessage.classList.add('show'), 500);
+    fireConfetti();
+
+    // Relight the candles after a few seconds so the moment can be repeated
+    setTimeout(() => {
+      candles.forEach(candle => candle.classList.remove('blown'));
+      wishMessage.classList.remove('show');
+      wishBtn.textContent = 'Make a Wish';
+      animating = false;
+    }, 4200);
+  });
+})();
+
+/* Lightweight canvas confetti — hearts & petals, no external libraries */
+function fireConfetti(){
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const glyphs = ['💕','🌸','✨','🎉','💗','🌟'];
+  const rect = document.getElementById('cake').getBoundingClientRect();
+  const originX = rect.left + rect.width / 2;
+  const originY = rect.top;
+
+  const particles = Array.from({ length: 42 }, () => ({
+    x: originX,
+    y: originY,
+    vx: (Math.random() - 0.5) * 9,
+    vy: -(Math.random() * 9 + 4),
+    gravity: 0.22,
+    rotation: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.2,
+    size: 16 + Math.random() * 14,
+    glyph: glyphs[Math.floor(Math.random() * glyphs.length)],
+    life: 1,
+    decay: 0.008 + Math.random() * 0.01
+  }));
+
+  let frame;
+  function tick(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+
+    particles.forEach(p => {
+      if (p.life <= 0) return;
+      alive = true;
+
+      p.vy += p.gravity;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.rotSpeed;
+      p.life -= p.decay;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(p.life, 0);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.font = p.size + 'px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.glyph, 0, 0);
+      ctx.restore();
+    });
+
+    if (alive){
+      frame = requestAnimationFrame(tick);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      cancelAnimationFrame(frame);
+    }
+  }
+  tick();
+}
+
+window.addEventListener('resize', () => {
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+/* ---------- 5. SMALL UTILITIES ------------------------------------------ */
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
